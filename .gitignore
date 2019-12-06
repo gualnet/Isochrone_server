@@ -6,6 +6,7 @@ coverage/
 # FILE
 database/config/config.json
 docker-compose.yml
+config/config.js
 
 
 # FILE EXT

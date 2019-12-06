@@ -1,7 +1,6 @@
-const Axios = require('axios');
 const config = require('../../config/config');
 
-const API_KEY = config.API_KEY;
+const GOOGLE_API_KEY = config.GOOGLE_API_KEY;
 const API_PLACE_URL = 'https://maps.googleapis.com/maps/api/place/nearbysearch';
 const OUTPUT_TYPE = 'json'
 
@@ -13,7 +12,7 @@ module.exports = {
     const TYPES = 'food';
     const NAME = 'harbour'
 
-    let PARAMS = `key=${API_KEY}`;
+    let PARAMS = `key=${GOOGLE_API_KEY}`;
     PARAMS += `&radius=${RADIUS}`;
     PARAMS += `&location=${LOCATION}`;
     PARAMS += `&types=${TYPES}`;
