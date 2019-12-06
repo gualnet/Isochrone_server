@@ -19,6 +19,8 @@ module.exports = (sequelize, DataTypes) => {
     underscored: true,
     timestamps: false,
   });
-  EventSubTypes.associate = function associate(models) {};
+  EventSubTypes.associate = function associate(models) {
+    EventSubTypes.belongsTo(models.EventTypes, { as: 'type', onDelete: 'cascade' });
+  };
   return EventSubTypes;
 };

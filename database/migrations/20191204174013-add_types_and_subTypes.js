@@ -11,14 +11,28 @@ module.exports = {
   * @returns
   */
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.bulkInsert('event_types', [
-      { name: eventTypes.type.RESAURANT },
-      { name: eventTypes.type.BAR },
-    ]);
-
-    let subTypesArr = [];
-    Object.keys(eventTypes.subType).map((key) => subTypesArr.push({ name: eventTypes.subType[key] }));
-    await queryInterface.bulkInsert('event_sub_types', subTypesArr);
+    try {
+      let typesArr = [];
+      let subTypesArr = [];
+      let typeId = 1;
+      for (const i in eventTypes) {
+        typesArr.push({
+          id: typeId,
+          name: eventTypes[i].type,
+        });
+        Object.keys(eventTypes[i].subType).map((key) => {
+          subTypesArr.push({
+            type_id: typeId,
+            name: eventTypes[i].subType[key],
+          });
+        });
+        typeId++;
+      }
+      await queryInterface.bulkInsert('event_types', typesArr);
+      await queryInterface.bulkInsert('event_sub_types', subTypesArr);
+    } catch (error) {
+      console.error(error);
+    }
   },
 
   down: async (queryInterface, Sequelize) => {
