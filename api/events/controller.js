@@ -20,7 +20,8 @@ module.exports = {
 
       return res.status(200).send({ event });
     } catch (error) {
-      console.error(error);
+      console.log('\nreq.body.event', req.body.event)
+      console.error('\n', error);
       return res.status(500).send({ error: 'something' });
     }
 
