@@ -1,0 +1,26 @@
+{
+  "development": {
+    "username": "username":,
+    "password": "password",
+    "database": "database_dev",
+    "host": "127.0.0.1",
+    "port": "3306",
+    "dialect": "mysql"
+  },
+  "test": {
+    "username": "username":,
+    "password": "password",
+    "database": "database_test",
+    "host": "127.0.0.1",
+    "port": "3306",
+    "dialect": "mysql"
+  },
+  "production": {
+    "username": "username":,
+    "password": "password",
+    "database": "database_prod",
+    "host": "127.0.0.1",
+    "port": "3306",
+    "dialect": "mysql"
+  }
+}

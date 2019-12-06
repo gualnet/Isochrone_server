@@ -1,0 +1,13 @@
+# DIR
+node_modules/
+coverage/
+.nyc_output/
+
+# FILE
+database/config/config.json
+docker-compose.yml
+
+
+# FILE EXT
+.vscode
+
