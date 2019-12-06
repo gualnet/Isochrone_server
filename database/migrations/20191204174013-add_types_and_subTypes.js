@@ -1,6 +1,6 @@
 'use strict';
 
-const eventTypes = require('../../api/events/models/eventTypes');
+const eventTypes = require('../../libs/enum/eventTypes');
 
 module.exports = {
   /**
