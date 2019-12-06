@@ -6,9 +6,17 @@ module.exports = {
     try {
       const event = await db.models.Events.create({
         ...req.body.event,
-        userId: req.user.id + 2,
+        userId: req.user.id,
       });
+      console.log('EVENT CREATED', event.dataValues);
       // ! inscrire les participants a l'evenement en crant une relation dans la table user_events
+      // for the event owner
+      await db.models.UserEventJoin.create({
+        userId: req.user.id,
+        eventId: event.id,
+      });
+
+      // for each participant
 
       return res.status(200).send({ event });
     } catch (error) {
