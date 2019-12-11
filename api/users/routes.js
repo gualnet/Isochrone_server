@@ -4,8 +4,8 @@ const validator = require('./validator');
 const auth = require('../../libs/auth');
 
 router
-  .get('/:userId', validator.getUserById, auth.authUser, controller.getUserOwnInfo)
-  // .post('/', controller.createNewUser)
+  .get('/:userId', validator.getUserOwnInfo, auth.authUser, controller.getUserOwnInfo)
+  .post('/login', controller.login)
   // .put('/:userId', auth.authUser, controller.updateUser)
   // .delete('/:userId', auth.authUser, controller.deleteUser)
 

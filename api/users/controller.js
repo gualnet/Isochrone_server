@@ -2,13 +2,22 @@ const db = require('../../database');
 const services = require('./services');
 
 module.exports = {
-  Login: async (req, res, next) => {
+  login: async (req, res, next) => {
+    // console.log('BODY', req.body);
     
-    
-    res.status(200).send('createNewUser');
+    try {
+      const userFound = await db.models.Users.findOne({
+        where: { ...req.body },
+      });
+      const userInfo = services.cleanUserInfo(userFound);
+      res.status(200).send(userInfo);
+    } catch (error) {
+      console.log('[ERROR]', error);
+      return res.status(500).send({ error: 'Nothing to see here !' });
+    }
   },
 
-  SignUp: async (req, res, next) => {
+  signUp: async (req, res, next) => {
     
     
     res.status(200).send('updateUser');
@@ -18,33 +27,17 @@ module.exports = {
 
     if (req.user.id !== req.params.userId) {
       console.log('[ERROR] auth users/getUserById')
-      return res.status(400).send('not auth');
+      return res.status(403).send('not auth');
     }
 
-    const userFound = await db.models.Users.findOne({
-      where: { id: req.params.userId }
-    });
+    try {
+      const userFound = await services.getUserById(req.params.userId)
+      const userInfo = services.cleanUserInfo(userFound);
+      return res.status(200).send({ user: userInfo });
+    } catch (error) {
+      console.log();
+      return res.status(500).send('nothing here')
+    }
 
-    const { 
-      id, 
-      token,
-      firstName,
-      lastName,
-      email,
-      phoneNumber,
-      localisation,
-      createdAt,
-    } = userFound;
-    
-    res.status(200).send({ 
-      id, 
-      token,
-      firstName,
-      lastName,
-      email,
-      phoneNumber,
-      localisation,
-      createdAt,
-    });
   },
 };

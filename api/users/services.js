@@ -1,37 +1,30 @@
 const db = require('../../database');
 
 module.exports = {
-  createNewUser: async (req, res, next) => {
-    
-    
-    res.status(200).send('createNewUser');
+  cleanUserInfo: (rawUser) => {
+    if (!rawUser) return null;
+    const cleanUser = { 
+      id: rawUser.id,
+      token: rawUser.token,
+      firstName: rawUser.firstName,
+      lastName: rawUser.lastName,
+      email: rawUser.email,
+      phoneNumber: rawUser.phoneNumber,
+      localisation: rawUser.localisation,
+      createdAt: rawUser.createdAt,
+    };
+
+    return cleanUser;
   },
 
-  updateUser: async (req, res, next) => {
-    
-    
-    res.status(200).send('updateUser');
-  },
-
-  deleteUser: async (req, res, next) => {
-    
-    
-    res.status(200).send('deleteUser');
-  },
-
-  getUserById: async (req, res, next) => {
-    // console.log('user', req.user)
-    // console.log('userId', req.params)
-
-    if (req.user.id !== req.params.userId) {
-      console.log('[ERROR] auth users/getUserById')
-      return res.status(400).send('not auth');
+  getUserById: async (id) => {
+    try {
+      const userFound = await db.models.Users.findOne({
+        where: { id }
+      });
+      return userFound;
+    } catch (error) {
+      throw error
     }
-
-    const userFound = await db.models.Users.findOne({
-      where: { id: req.params.userId }
-    });
-    
-    res.status(200).send({ user: userFound });
   },
 };
