@@ -1,5 +1,8 @@
+const Sequelize = require('sequelize');
 const db = require('../../database');
 const services = require('./services');
+
+const Op = Sequelize.Op;
 
 module.exports = {
   login: async (req, res, next) => {
@@ -52,5 +55,43 @@ module.exports = {
       return res.status(500).send('nothing here')
     }
 
+  },
+
+  checkContactList: async (req, res, next) => {
+    const contactList = req.body;
+    const contactNumbers = [];
+    for (const contact of contactList) {
+      console.log('\n-------------', contact.name);
+      // console.log(contact);
+      for (const numbers of contact.phoneNumbers) {
+        console.log(numbers.digits);
+        contactNumbers.push(numbers.digits);
+      }
+    }
+    console.log('contactNumbers', contactNumbers);
+    const test = {
+      where: {
+        phoneNumber: {
+          [Op.or]: [...contactNumbers],
+        }
+      }
+    };
+    console.log('test', test);
+
+    try {
+
+      const contactsFound = await db.models.Users.findAll(test);
+      console.log('\n\n');
+      const contactsArr = [];
+      for (const contact of contactsFound) {
+        console.log(contact.dataValues);
+        contactsArr.push(services.cleanUserInfo(contact.dataValues));
+      }
+
+
+      return res.status(200).send(contactsArr);
+    } catch (error) {
+      return res.status(500).send('checkContactList');
+    }
   },
 };

@@ -7,5 +7,6 @@ router
   .get('/:userId', validator.getUserOwnInfo, auth.authUser, controller.getUserOwnInfo)
   .post('/login', controller.login)
   .post('/register', controller.register)
+  .post('/contacts', controller.checkContactList)
 
 module.exports = router;
