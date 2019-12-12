@@ -17,10 +17,23 @@ module.exports = {
     }
   },
 
-  signUp: async (req, res, next) => {
-    
-    
-    res.status(200).send('updateUser');
+  register: async (req, res, next) => {
+    try {
+      const newUser = await db.models.Users.create({
+        token: 0,
+        firstName: null,
+        lastName: null,
+        email: req.body.email,
+        password: req.body.password,
+        phoneNumber: req.body.phoneNumber,
+        localisation: null,
+      });
+      console.log('NEW USER', newUser.dataValues);
+      return res.status(200).send('ok');
+    } catch (error) {
+      console.error(error);
+      return res.status(500).send('INTERNAL ERROR - register');
+    }
   },
 
   getUserOwnInfo: async (req, res, next) => {
