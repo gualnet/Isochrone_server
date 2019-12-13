@@ -2,22 +2,27 @@ const db = require('../../database/index');
 
 module.exports = {
   createNewEvent: async (req, res, next) => {
-    console.log('EVENT: CREATE');
+    console.log('EVENT: CREATE', req.body.event.participantsList);
     try {
       const event = await db.models.Events.create({
         ...req.body.event,
         userId: req.user.id,
       });
       console.log('EVENT CREATED', event.dataValues);
-      // ! inscrire les participants a l'evenement en crant une relation dans la table user_events
+      
       // for the event owner
       await db.models.UserEventJoin.create({
         userId: req.user.id,
         eventId: event.id,
       });
 
-      // for each participant
+      // inscrire les participants a l'evenement en crant une relation dans la table user_events
+      req.body.event.participantsList.map(async (participant) => await db.models.UserEventJoin.create({
+        eventId: event.id,
+        userId: participant.id,
+      }) )
 
+      // for each participant
       return res.status(200).send({ event });
     } catch (error) {
       console.log('\nreq.body.event', req.body.event)
