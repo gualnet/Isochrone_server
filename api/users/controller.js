@@ -60,37 +60,34 @@ module.exports = {
   checkContactList: async (req, res, next) => {
     const contactList = req.body;
     const contactNumbers = [];
+
+    // for each contact of the list extract the contacts phone numbers
     for (const contact of contactList) {
-      console.log('\n-------------', contact.name);
-      // console.log(contact);
       for (const numbers of contact.phoneNumbers) {
-        console.log(numbers.digits);
+      console.log(numbers.digits);
         contactNumbers.push(numbers.digits);
       }
     }
-    console.log('contactNumbers', contactNumbers);
-    const test = {
-      where: {
-        phoneNumber: {
-          [Op.or]: [...contactNumbers],
-        }
+
+    // * Build the query
+    const queryWhereParameter = {
+      phoneNumber: {
+        [Op.or]: [...contactNumbers],
       }
     };
-    console.log('test', test);
 
     try {
-
-      const contactsFound = await db.models.Users.findAll(test);
-      console.log('\n\n');
+      // Query time
+      const contactsFound = await db.models.Users.findAll({ where: queryWhereParameter });
       const contactsArr = [];
+      // push the matching contacts into an array
       for (const contact of contactsFound) {
-        console.log(contact.dataValues);
         contactsArr.push(services.cleanUserInfo(contact.dataValues));
       }
-
-
+      // return the matching contacts data
       return res.status(200).send(contactsArr);
     } catch (error) {
+      console.error(error);
       return res.status(500).send('checkContactList');
     }
   },
