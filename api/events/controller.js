@@ -90,23 +90,27 @@ module.exports = {
         include: [{
           model: db.models.Users,
           as: 'user',
-        }]
+        }],
       });
 
-      const participantsList = await db.models.UserEventJoin.findAll({
+      const eventUsersList = await db.models.UserEventJoin.findAll({
         attributes: [],
         where: { eventId },
         include: [{
           model: db.models.Users,
           as: 'user',
-        }]
+        }],
       });
+      // reorder the participants results
+      const participantsList = []
+      for (item of eventUsersList) {
+        participantsList.push(item.dataValues.user.dataValues);
+      }
 
       const event = {
         ...eventFound.dataValues,
         participantsList,
-      }
-      
+      };
       return res.status(200).send(event);
     } catch (error) {
       console.error(error);
