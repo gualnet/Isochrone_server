@@ -2,7 +2,7 @@ const db = require('../../database/index');
 
 module.exports = {
   createNewEvent: async (req, res, next) => {
-    console.log('EVENT: CREATE', req.body.event.participantsList);
+    console.log('EVENT: CREATE', req.body);
     try {
       const event = await db.models.Events.create({
         ...req.body.event,
