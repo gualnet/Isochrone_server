@@ -62,7 +62,11 @@ module.exports = {
     try {
       const foundUserEvents = await db.models.UserEventJoin.findAll({
         where: { userId: req.user.id },
-        include: [{ model: db.models.Events, as: 'event' }],
+        include: [{
+          model: db.models.Events,
+          as: 'event'
+
+        }],
       });
 
       const userEvents = [];
@@ -76,13 +80,36 @@ module.exports = {
     }
   },
   
-  getEventById: (req, res, next) => {
-    console.log('EVENT: GET BY ID');
+  getEventById: async (req, res, next) => {
+    console.log('\nEVENT: GET BY ID');
     try {
       const { eventId } = req.params;
+      const eventFound = await db.models.Events.findOne({
+        attributes: ['id', 'name', 'date', 'createdAt', 'eventTypeId', 'eventSubTypeId'],
+        where: { id: eventId },
+        include: [{
+          model: db.models.Users,
+          as: 'user',
+        }]
+      });
+
+      const participantsList = await db.models.UserEventJoin.findAll({
+        attributes: [],
+        where: { eventId },
+        include: [{
+          model: db.models.Users,
+          as: 'user',
+        }]
+      });
+
+      const event = {
+        ...eventFound.dataValues,
+        participantsList,
+      }
       
-      return res.status(200).send();
+      return res.status(200).send(event);
     } catch (error) {
+      console.error(error);
       return res.status(500).send('not implemented');
     }
   },
