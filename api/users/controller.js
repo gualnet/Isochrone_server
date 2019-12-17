@@ -64,7 +64,6 @@ module.exports = {
     // for each contact of the list extract the contacts phone numbers
     for (const contact of contactList) {
       for (const numbers of contact.phoneNumbers) {
-      console.log(numbers.digits);
         contactNumbers.push(numbers.digits);
       }
     }
