@@ -7,6 +7,14 @@ module.exports = (sequelize, DataTypes) => {
       autoIncrement: true,
       allowNull: false,
     },
+    longitude: {
+      type: DataTypes.DECIMAL(10, 5),
+      allowNull: true,
+    },
+    latitude: {
+      type: DataTypes.DECIMAL(10, 5),
+      allowNull: true,
+    },
   }, {
     charset: 'utf8',
     collate: 'utf8_unicode_ci',
