@@ -1,4 +1,5 @@
 const db = require('../../database/index');
+const service = require('./services');
 
 module.exports = {
   createNewEvent: async (req, res, next) => {
@@ -14,13 +15,24 @@ module.exports = {
       await db.models.UserEventJoin.create({
         userId: req.user.id,
         eventId: event.id,
+        latitude: req.body.event.latitude,
+        longitude: req.body.event.longitude,
       });
 
       // inscrire les participants a l'evenement en crant une relation dans la table user_events
-      req.body.event.participantsList.map(async (participant) => await db.models.UserEventJoin.create({
-        eventId: event.id,
-        userId: participant.id,
-      }) )
+      req.body.event.participantsList.map(async (participant) => {
+        const randGeoloc = service.randomiseGeoloc([
+          req.body.event.latitude,
+          req.body.event.longitude
+        ]);
+        return await db.models.UserEventJoin.create({
+            eventId: event.id,
+            userId: participant.id,
+            latitude: randGeoloc[0],
+            longitude: randGeoloc[1],
+          });
+        }
+      );
 
       // for each participant
       return res.status(200).send({ event });
@@ -84,6 +96,7 @@ module.exports = {
     console.log('\nEVENT: GET BY ID');
     try {
       const { eventId } = req.params;
+      // je recupere les infos sur l'evenement
       const eventFound = await db.models.Events.findOne({
         attributes: ['id', 'name', 'date', 'createdAt', 'eventTypeId', 'eventSubTypeId'],
         where: { id: eventId },
@@ -92,19 +105,30 @@ module.exports = {
           as: 'user',
         }],
       });
+      if (!eventFound) {
+        return res.status(404).send(null);
+      }
 
+      // je recupere les differents participants a l'evenement
       const eventUsersList = await db.models.UserEventJoin.findAll({
-        attributes: [],
+        attributes: ['longitude', 'latitude'],
         where: { eventId },
         include: [{
           model: db.models.Users,
           as: 'user',
         }],
       });
-      // reorder the participants results
+      // console.log('\n\n-->', eventUsersList);
+
+      // je reorganise la structure des data avant de les envoyer
       const participantsList = []
       for (item of eventUsersList) {
-        participantsList.push(item.dataValues.user.dataValues);
+        // console.log('\n-->', item.dataValues.user.dataValues);
+        participantsList.push({
+          ...item.dataValues.user.dataValues,
+          latitude: item.dataValues.latitude,
+          longitude: item.dataValues.longitude,
+        });
       }
 
       const event = {
@@ -114,7 +138,7 @@ module.exports = {
       return res.status(200).send(event);
     } catch (error) {
       console.error(error);
-      return res.status(500).send('not implemented');
+      return res.status(500).send('');
     }
   },
 
