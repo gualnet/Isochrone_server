@@ -1,12 +1,15 @@
 const db = require('../../database/index');
 const service = require('./services');
 
+let nameNumber = 1;
 module.exports = {
   createNewEvent: async (req, res, next) => {
     console.log('EVENT: CREATE', req.body);
+    nameNumber += 1;
     try {
       const event = await db.models.Events.create({
         ...req.body.event,
+        name: `Event_${nameNumber}`,
         userId: req.user.id,
       });
       // console.log('EVENT CREATED', event.dataValues);
