@@ -9,7 +9,7 @@ module.exports = {
         ...req.body.event,
         userId: req.user.id,
       });
-      console.log('EVENT CREATED', event.dataValues);
+      // console.log('EVENT CREATED', event.dataValues);
       
       // for the event owner
       await db.models.UserEventJoin.create({
@@ -118,12 +118,10 @@ module.exports = {
           as: 'user',
         }],
       });
-      // console.log('\n\n-->', eventUsersList);
 
       // je reorganise la structure des data avant de les envoyer
       const participantsList = []
       for (item of eventUsersList) {
-        // console.log('\n-->', item.dataValues.user.dataValues);
         participantsList.push({
           ...item.dataValues.user.dataValues,
           latitude: item.dataValues.latitude,
