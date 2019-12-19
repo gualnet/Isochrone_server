@@ -2,7 +2,7 @@ const db = require('./index');
 
 const sync = async () => {
   try {
-    await db.sequelize.sync();
+    // await db.sequelize.sync();
   } catch (error) {
     console.error('[ERROR] SEQUELIZE SYNC\n', error);
   }
