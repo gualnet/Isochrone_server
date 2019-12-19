@@ -6,11 +6,21 @@ const Op = Sequelize.Op;
 
 module.exports = {
   login: async (req, res, next) => {
-    // console.log('BODY', req.body);
-    
+    console.log('BODY', req.body);
     try {
       const userFound = await db.models.Users.findOne({
         where: { ...req.body },
+      });
+      if (!userFound) {
+        return res.status(200).send();
+      }
+      // generate a new token
+      const newToken = `token_${userFound.dataValues.id}_${userFound.dataValues.firstName}_${userFound.dataValues.lastName}`;
+      // update the token
+      await userFound.update({
+        token: newToken
+      }, {
+        where: { id: userFound.dataValues.id }
       });
       const userInfo = services.cleanUserInfo(userFound);
       res.status(200).send(userInfo);
