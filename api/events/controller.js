@@ -79,8 +79,7 @@ module.exports = {
         where: { userId: req.user.id },
         include: [{
           model: db.models.Events,
-          as: 'event'
-
+          as: 'event',
         }],
       });
 
@@ -121,7 +120,7 @@ module.exports = {
           as: 'user',
         }],
       });
-
+      
       // je reorganise la structure des data avant de les envoyer
       const participantsList = []
       for (item of eventUsersList) {
