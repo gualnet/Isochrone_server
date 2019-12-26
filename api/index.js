@@ -5,7 +5,7 @@ const events = require('./events/routes');
 const users = require('./users/routes');
 
 router.get('/health', healthTest.heathyResponse);
-router.use('/google', googleApi);
+router.use('/external', googleApi);
 router.use('/events', events);
 router.use('/users', users);
 
