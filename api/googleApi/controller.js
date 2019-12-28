@@ -13,7 +13,7 @@ module.exports = {
   getAllPoiInADelimitedArea: async (req, res, next) => {
     console.clear()
     console.log('req.body', req.body);
-    const RADIUS = '10000';
+    const RADIUS = '1000';
     // const LOCATION = '52.542685950022474,13.42151664883959'; // Berlin
     // const LOCATION = '52.494412,13.3987047';
     const TYPES = 'restaurant';
@@ -44,7 +44,7 @@ module.exports = {
         data: null,
       };
 
-      // * Retourne la data stocke dans searchResponse.json
+      // // * Retourne la data stocke dans searchResponse.json
       const data = fs.readFileSync('./searchResponse.json', "utf8");
       response.status = 200;
       response.data = data
