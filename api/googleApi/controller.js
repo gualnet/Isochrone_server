@@ -13,8 +13,9 @@ module.exports = {
   getAllPoiInADelimitedArea: async (req, res, next) => {
     console.clear()
     console.log('req.body', req.body);
-    const RADIUS = '1000';
-    const LOCATION = '52.494412,13.3987047';
+    const RADIUS = '10000';
+    // const LOCATION = '52.542685950022474,13.42151664883959'; // Berlin
+    // const LOCATION = '52.494412,13.3987047';
     const TYPES = 'restaurant';
     const NAME = 'harbour';
 
@@ -29,7 +30,7 @@ module.exports = {
     const barycentreCoords = service.getBarycentre(coordsArray);
     console.log('RES', barycentreCoords, `${barycentreCoords[0]}, ${barycentreCoords[1]}`);
     // PARAMS += `&location=${LOCATION}`;
-    PARAMS += `&location=${barycentreCoords[0]},${barycentreCoords[1]}`;
+    PARAMS += `&location=${barycentreCoords[1]},${barycentreCoords[0]}`;
 
     // * TYPE
     PARAMS += `&types=${TYPES}`;
@@ -41,17 +42,25 @@ module.exports = {
       let response = {
         status: null,
         data: null,
-      }
-      const fd = fs.openSync('./searchResponse', 'w');
-      
-      // ! evite les appels useless
-      // response = await axios.get(fullUrl);
-      console.log('\nRESPONSE', response.status);
-      console.log('\nRESPONSE', response.data);
-      const jsonData = JSON.stringify(response.data);
-      const R = fs.writeSync(fd, jsonData);
+      };
 
-      fs.closeSync(fd);
+      // * Retourne la data stocke dans searchResponse.json
+      const data = fs.readFileSync('./searchResponse.json', "utf8");
+      response.status = 200;
+      response.data = data
+
+      // // * appel l'api google place
+      // // ! evite les appels useless
+      // response = await axios.get(fullUrl);
+
+      // // * stocke la data recu de l'api google dans le fichier ./searchResponse
+      // const fd = fs.openSync('./searchResponse', 'w');
+      // const jsonData = JSON.stringify(response.data);
+      // const R = fs.writeSync(fd, jsonData);
+      // fs.closeSync(fd);
+      
+      // console.log('\nRESPONSE', response.status);
+      // console.log('\nRESPONSE', response.data);
       return res.status(200).send(response.data);
     } catch (error) {
       console.error(error);
