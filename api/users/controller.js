@@ -70,12 +70,15 @@ module.exports = {
   checkContactList: async (req, res, next) => {
     const contactList = req.body;
     const contactNumbers = [];
-
     // for each contact of the list extract the contacts phone numbers
     for (const contact of contactList) {
       if (contact.phoneNumbers) {
         for (const numbers of contact.phoneNumbers) {
-          contactNumbers.push(numbers.digits);
+          if (numbers.digits) {
+            contactNumbers.push(numbers.digits);
+          } else if (numbers.number) {
+            contactNumbers.push(numbers.number);
+          }
         }
       }
     }
