@@ -28,6 +28,7 @@ Object.keys(models).forEach((table) => {
 const db = {
   sequelize: sequelize,
   Sequelize: Sequelize,
+  Op: require('sequelize').Op,
   models: models,
 };
 
