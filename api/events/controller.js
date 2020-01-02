@@ -47,18 +47,28 @@ module.exports = {
 
   },
 
-  updateEvent: (req, res, next) => {
-    console.log('EVENT: UPDATE');
+  /**
+   * Update the user position for the specified event
+   */
+  updateUserPositonInEvent: async (req, res, next) => {
+    console.log('EVENT: update user position');
     try {
-      const eventData = req.body.event;
-      const { eventId } = req.params;
-      
+      const userEvent = await db.models.UserEventJoin.update({
+        latitude: req.body.position[0],
+        longitude: req.body.position[1],
+      }, {
+        where: {
+          [db.Op.and]: {
+            eventId: req.params.eventId,
+            userId: req.user.id,
+          },
+        },
+      });
       return res.status(200).send();
     } catch (error) {
-      return res.status(500).send('not implemented');
+      console.error(error);
+      return res.status(500).send('An internal error occured');
     }
-
-    return res.status(200).send(eventContainer[eventId - 1]);
   },
   
   deleteEvent: (req, res, next) => {
