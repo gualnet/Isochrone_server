@@ -3,8 +3,6 @@ const db = require('../database');
 module.exports = {
   authUser: async (req, res, next) => {
     console.log('\n=====authUser=====');
-    // console.log('req.body', req.body);
-    // console.log('req.headers', req.headers);
 
     try {
       // get the token
