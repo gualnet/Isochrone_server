@@ -10,42 +10,6 @@ const URL_PLACE_PHOTO = 'https://maps.googleapis.com/maps/api/place/photo';
 const OUTPUT_TYPE = 'json'
 const SUPPORTED_TYPES = ['bar', 'cafe', 'movie_theater', 'night_club', 'park', 'restaurant', 'rv_park', 'tourist_attraction', 'zoo'];
 
-const getPictureForPlaceDetails = async (pictureInfo) => {
-  console.log('\ngetPictureForPlaceDetails');
-  console.log(pictureInfo, pictureInfo.length);
-  if (pictureInfo.length < 1) return;
-  try {
-    let PARAMS = `key=${GOOGLE_API_KEY}`;
-    PARAMS += '&maxwidth=500';
-    PARAMS += `&photoreference=${pictureInfo[0].photo_reference}`;
-    
-    const fullUrl = `${URL_PLACE_PHOTO}?${PARAMS}`;
-    console.log('GET PHOTO DETAILS URL', fullUrl)
-
-    // const response = await axios({
-    //   method: 'GET',
-    //   url: fullUrl,
-    // });
-
-    // console.log(response)
-    // console.log(response.status)
-
-    // * ouvre le fichier raw stream
-    const imgStream = fs.readFileSync('./detailsPhoto.rawStream');
-    console.log('imgStream', imgStream.toString('base64'));
-    // // * stocke la data recu de l'api google dans le fichier ./detailsPhoto
-    // const fd = fs.openSync('./detailsPhoto', 'w');
-    // // const jsonData = JSON.stringify(response.data);
-    // const R = fs.writeSync(fd, response.data);
-    // fs.closeSync(fd);
-
-
-    return imgStream;
-  } catch (error) {
-    console.error(error);
-  }
-};
-
 module.exports = {
 
   getAllPoiInADelimitedArea: async (req, res, next) => {
@@ -136,24 +100,56 @@ module.exports = {
       //     console.log();
       //   }
       // }
-
-      const pictureStream = await getPictureForPlaceDetails(data.photos);
-      console.log('pictureStream', pictureStream);  
-      data.pictureStream = pictureStream;
-      
       return res.status(200).send(data);
     } catch (error) {
       console.error(error);
       return res.status(500).send('nok');
     }
-  }
-  // getPlaceDetails: async () => {
+  },
+
+  // !?! useless
+  // getPictureForPlaceDetails: async (req, res, next) => {
+  //   console.log('\ngetPictureForPlaceDetails')
+  //   console.log(req.params);
+  //   const { photoReference } = req.params; // ! to use later
+  //   const pictureInfo = [{
+  //     height: 4160,
+  //     html_attributions: ['Array'],
+  //     photo_reference: 'CmRaAAAABHPuoOfgLz_DkMAM8M6F8YjHdwqJ06mKofka1ogo-En1Gx_y9syLsk_5rvdNcUbxMEasIlmbnoFKd9QiyOjt2davqFQphTUeugEKyxLEgsvhS19vEUuIwo7upji7MhWHEhAvfgIVuvFQpwKWuTIoaWqNGhRJ9pfVY5Ol6ZA8fyaIASao_o9PNQ',
+  //     width: 3120
+  //   }]; // ! data provided by client
+  //   console.log(pictureInfo, pictureInfo.length);
+  //   if (pictureInfo.length < 1) return;
   //   try {
+  //     let PARAMS = `key=${GOOGLE_API_KEY}`;
+  //     PARAMS += '&maxwidth=500';
+  //     PARAMS += `&photoreference=${pictureInfo[0].photo_reference}`;
       
-  //     return res.status(200).send('ok');
+  //     const fullUrl = `${URL_PLACE_PHOTO}?${PARAMS}`;
+  //     console.log('GET PHOTO DETAILS URL', fullUrl)
+  
+  //     // const response = await axios({
+  //     //   method: 'GET',
+  //     //   url: fullUrl,
+  //     // });
+  
+  //     // console.log(response)
+  //     // console.log(response.status)
+  
+  //     // * ouvre le fichier raw stream
+  //     const imgStream = fs.readFileSync('./detailsPhoto.rawStream');
+  //     // console.log('imgStream', imgStream.toString('base64'));
+  //     // // * stocke la data recu de l'api google dans le fichier ./detailsPhoto
+  //     // const fd = fs.openSync('./detailsPhoto', 'w');
+  //     // // const jsonData = JSON.stringify(response.data);
+  //     // const R = fs.writeSync(fd, response.data);
+  //     // fs.closeSync(fd);
+  
+  
+  //     return res.status(200).set('Content-Type', 'image/png').send(imgStream);
   //   } catch (error) {
-      
-  //     return res.status(500).send('nok');
+  //     console.error(error);
   //   }
-  // }
+  // },
+
 };

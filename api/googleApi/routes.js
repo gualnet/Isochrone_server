@@ -6,8 +6,9 @@ const controller = require('./controller');
 router
   .post('/place/search', auth.authUser, controller.getAllPoiInADelimitedArea)
   .post('/place/details',
-        // auth.authUser,
-        controller.getPlaceDetailsTEST)
+  // auth.authUser,
+  controller.getPlaceDetailsTEST)
+  // .get('/place/photo/:photoReference', controller.getPictureForPlaceDetails)
 
 
 module.exports = router;
