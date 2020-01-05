@@ -12,3 +12,7 @@ config/config.js
 # FILE EXT
 .vscode
 
+placeDetails.json
+detailsPhoto.rawStream
+searchResponse.json
+searchResponse_1.json
