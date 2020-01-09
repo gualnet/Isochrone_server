@@ -18,3 +18,4 @@ detailsPhoto.rawStream
 searchResponse.json
 searchResponse_1.json
 
+chatLogs/*.log
